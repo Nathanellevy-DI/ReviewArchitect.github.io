@@ -47,10 +47,14 @@ const ReviewForm = () => {
             serviceQuality, starDish, verdict, deliverySpeed, foodTemp, deliveryCondition
         } = formData;
 
-        let review = `I recently ` + (diningType === 'Delivery' ? `ordered delivery from ` : `visited `) + `${name}${location ? ` in ${location}` : ''} for some ${diningType.toLowerCase()} food. `;
+        let review = '';
+        if (diningType === 'Delivery') {
+            review += `I recently ordered delivery from ${name}${location ? ` in ${location}` : ''} using ${deliveryApp}, and `;
+        } else {
+            review += `I recently visited ${name}${location ? ` in ${location}` : ''} for some ${diningType.toLowerCase()} food. `;
+        }
 
         if (diningType === 'Delivery') {
-            review += `I ordered through ${deliveryApp}, and `;
             if (deliverySpeed === 'Fast') {
                 review += `it arrived incredibly fast! `;
             } else if (deliverySpeed === 'On Time') {
@@ -128,7 +132,11 @@ const ReviewForm = () => {
         }
 
         if (starDish) {
-            review += `When the food came out, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+            if (diningType === 'Delivery') {
+                review += `After we tried everything, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+            } else {
+                review += `When the food came out, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+            }
         }
 
         review += `\n\nOverall, ${verdict}`;
