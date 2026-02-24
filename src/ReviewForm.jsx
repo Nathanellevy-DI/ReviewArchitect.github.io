@@ -96,34 +96,34 @@ const ReviewForm = () => {
                 review += ` (${cleanlinessDetails})`;
             }
             review += `. `;
-        }
 
-        if (serviceType === 'Counter Service') {
-            review += `Since you order at the register, I interacted with the staff right away. `;
-            if (staffName) {
-                review += `${staffName} helped me out, and was `;
-            } else {
-                review += `The associate at the counter was `;
-            }
+            if (serviceType === 'Counter Service') {
+                review += `Since you order at the register, I interacted with the staff right away. `;
+                if (staffName) {
+                    review += `${staffName} helped me out, and was `;
+                } else {
+                    review += `The associate at the counter was `;
+                }
 
-            if (counterAttentive === 'Yes') {
-                review += `very attentive while taking my order`;
-            } else {
-                review += `a bit distracted while taking my order`;
-            }
+                if (counterAttentive === 'Yes') {
+                    review += `very attentive while taking my order`;
+                } else {
+                    review += `a bit distracted while taking my order`;
+                }
 
-            if (counterRecommended === 'Yes') {
-                review += ` and even offered some great recommendations! `;
-                if (recommendedItems) {
-                    review += `They specifically suggested trying the ${recommendedItems}, which was a nice touch. `;
+                if (counterRecommended === 'Yes') {
+                    review += ` and even offered some great recommendations! `;
+                    if (recommendedItems) {
+                        review += `They specifically suggested trying the ${recommendedItems}, which was a nice touch. `;
+                    }
+                } else {
+                    review += `. `;
                 }
             } else {
-                review += `. `;
-            }
-        } else {
-            review += `We were seated for table service, and the staff was remarkably ${serviceQuality.toLowerCase()} throughout the meal. `;
-            if (staffName) {
-                review += `Specifically, ${staffName} took great care of us. `;
+                review += `We were seated for table service, and the staff was remarkably ${serviceQuality.toLowerCase()} throughout the meal. `;
+                if (staffName) {
+                    review += `Specifically, ${staffName} took great care of us. `;
+                }
             }
         }
 
