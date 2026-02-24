@@ -1,0 +1,17 @@
+{
+    "name": "Review Architect",
+    "short_name": "Reviewer",
+    "description": "Craft the perfect restaurant review in seconds",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#EBE9E1",
+    "theme_color": "#EBE9E1",
+    "icons": [
+        {
+            "src": "/icon.png",
+            "sizes": "1024x1024",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
