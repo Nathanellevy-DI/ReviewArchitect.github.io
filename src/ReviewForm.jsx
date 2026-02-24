@@ -96,7 +96,8 @@ const ReviewForm = () => {
         }
 
         if (diningType !== 'Delivery') {
-            review += `The place was ${busyness.toLowerCase()} when I went`;
+            const busynessText = busyness === 'Moderate' ? 'moderately busy' : busyness.toLowerCase();
+            review += `The place was ${busynessText} when I went`;
             if (busynessDetails) {
                 review += ` (${busynessDetails})`;
             }
@@ -111,7 +112,11 @@ const ReviewForm = () => {
             review += `. `;
 
             if (serviceType === 'Counter Service') {
-                review += `Since you order at the register, I interacted with the staff right away. `;
+                if (diningType === 'Takeout') {
+                    review += `Since I ordered takeout at the register, I interacted with the staff right away. `;
+                } else {
+                    review += `Since you order at the register, I interacted with the staff right away. `;
+                }
                 if (staffName) {
                     review += `${staffName} helped me out, and was `;
                 } else {
