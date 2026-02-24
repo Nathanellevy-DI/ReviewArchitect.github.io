@@ -8,6 +8,9 @@ const ReviewForm = () => {
         diningType: 'Dine-in',
         tableAvailability: 'Yes',
         deliveryApp: 'Uber Eats',
+        deliverySpeed: 'On Time',
+        foodTemp: 'Hot & Fresh',
+        deliveryCondition: 'Perfect condition',
         busyness: 'Moderate',
         busynessDetails: '',
         vibe: 'Cozy',
@@ -26,7 +29,7 @@ const ReviewForm = () => {
     const [generatedReview, setGeneratedReview] = useState('');
     const [showToast, setShowToast] = useState(false);
 
-    const totalSteps = 4; // Grouped into 4 physical pages
+    const totalSteps = formData.diningType === 'Delivery' ? 3 : 4; // Delivery has 3 phases
 
     const handleInputChange = (e) => {
         const { id, value, type, name } = e.target;
@@ -41,13 +44,36 @@ const ReviewForm = () => {
         const {
             name, location, diningType, tableAvailability, deliveryApp, busyness, busynessDetails, vibe, vibeDetails, cleanliness, cleanlinessDetails,
             serviceType, counterAttentive, counterRecommended, recommendedItems, staffName,
-            serviceQuality, starDish, verdict
+            serviceQuality, starDish, verdict, deliverySpeed, foodTemp, deliveryCondition
         } = formData;
 
         let review = `I recently ` + (diningType === 'Delivery' ? `ordered delivery from ` : `visited `) + `${name}${location ? ` in ${location}` : ''} for some ${diningType.toLowerCase()} food. `;
 
         if (diningType === 'Delivery') {
-            review += `I ordered through ${deliveryApp}, and everything arrived perfectly. `;
+            review += `I ordered through ${deliveryApp}, and `;
+            if (deliverySpeed === 'Fast') {
+                review += `it arrived incredibly fast! `;
+            } else if (deliverySpeed === 'On Time') {
+                review += `it arrived right on time. `;
+            } else {
+                review += `it unfortunately took quite a long time to get here. `;
+            }
+
+            if (foodTemp === 'Hot & Fresh') {
+                review += `Despite being delivery, the food arrived piping hot and fresh. `;
+            } else if (foodTemp === 'Warm') {
+                review += `The food was still warm when it arrived. `;
+            } else {
+                review += `Sadly, the food was completely cold by the time we got it. `;
+            }
+
+            if (deliveryCondition === 'Perfect condition') {
+                review += `Everything was packaged perfectly without any mess. `;
+            } else if (deliveryCondition === 'A bit messy') {
+                review += `The packaging was a bit messy, but manageable. `;
+            } else {
+                review += `Disappointingly, the food was spilled and damaged in transit. `;
+            }
         } else if (diningType === 'Dine-in') {
             if (tableAvailability === 'Yes') {
                 review += `It was very easy to get a table. `;
@@ -127,7 +153,7 @@ const ReviewForm = () => {
 
     const resetForm = () => {
         setFormData({
-            name: '', location: '', diningType: 'Dine-in', tableAvailability: 'Yes', deliveryApp: 'Uber Eats', busyness: 'Moderate', busynessDetails: '', vibe: 'Cozy', vibeDetails: '',
+            name: '', location: '', diningType: 'Dine-in', tableAvailability: 'Yes', deliveryApp: 'Uber Eats', deliverySpeed: 'On Time', foodTemp: 'Hot & Fresh', deliveryCondition: 'Perfect condition', busyness: 'Moderate', busynessDetails: '', vibe: 'Cozy', vibeDetails: '',
             cleanliness: 'Spotless', cleanlinessDetails: '', serviceType: 'Table Service', counterAttentive: 'Yes',
             counterRecommended: 'No', recommendedItems: '', staffName: '', serviceQuality: 'Attentive', starDish: '', verdict: ''
         });
@@ -143,7 +169,7 @@ const ReviewForm = () => {
 
     const isCurrentStepValid = () => {
         if (step === 0) return formData.name.trim() !== '';
-        if (step === 3) return formData.verdict.trim() !== '';
+        if (step === totalSteps - 1) return formData.verdict.trim() !== '';
         return true; // other steps have defaults or are optional
     };
 
@@ -219,7 +245,7 @@ const ReviewForm = () => {
                 </div>
             )}
 
-            {step === 1 && (
+            {step === 1 && formData.diningType !== 'Delivery' && (
                 <div className="step-container">
                     <h2 className="step-header">Phase 2: Atmosphere</h2>
 
@@ -260,7 +286,40 @@ const ReviewForm = () => {
                 </div>
             )}
 
-            {step === 2 && (
+            {step === 1 && formData.diningType === 'Delivery' && (
+                <div className="step-container">
+                    <h2 className="step-header">Phase 2: Delivery Experience</h2>
+
+                    <div className="question-group">
+                        <label className="question-title">Delivery Speed</label>
+                        <div className="radio-group">
+                            <RadioOption name="deliverySpeed" value="Fast" />
+                            <RadioOption name="deliverySpeed" value="On Time" />
+                            <RadioOption name="deliverySpeed" value="Late" />
+                        </div>
+                    </div>
+
+                    <div className="question-group">
+                        <label className="question-title">Food Temperature</label>
+                        <div className="radio-group">
+                            <RadioOption name="foodTemp" value="Hot & Fresh" />
+                            <RadioOption name="foodTemp" value="Warm" />
+                            <RadioOption name="foodTemp" value="Cold" />
+                        </div>
+                    </div>
+
+                    <div className="question-group">
+                        <label className="question-title">Condition upon arrival</label>
+                        <select id="deliveryCondition" className="select-field" value={formData.deliveryCondition} onChange={handleInputChange}>
+                            <option>Perfect condition</option>
+                            <option>A bit messy</option>
+                            <option>Spilled or damaged</option>
+                        </select>
+                    </div>
+                </div>
+            )}
+
+            {step === 2 && formData.diningType !== 'Delivery' && (
                 <div className="step-container">
                     <h2 className="step-header">Phase 3: The Service</h2>
 
@@ -316,7 +375,7 @@ const ReviewForm = () => {
                 </div>
             )}
 
-            {step === 3 && (
+            {(step === 3 && formData.diningType !== 'Delivery' || step === 2 && formData.diningType === 'Delivery') && (
                 <div className="step-container">
                     <h2 className="step-header">Phase 4: Food & Verdict</h2>
 
