@@ -47,6 +47,15 @@ const ReviewForm = () => {
             serviceQuality, starDish, verdict, deliverySpeed, foodTemp, deliveryCondition
         } = formData;
 
+        const isNegativeExperience =
+            deliverySpeed === 'Late' ||
+            foodTemp === 'Cold' ||
+            deliveryCondition === 'Spilled or damaged' ||
+            serviceQuality === 'Rushed' ||
+            serviceQuality === 'Inattentive' ||
+            cleanliness === 'A bit messy' ||
+            cleanliness === 'Needs serious improvement';
+
         let review = '';
         if (diningType === 'Delivery') {
             review += `I recently ordered delivery from ${name}${location ? ` in ${location}` : ''} using ${deliveryApp}, and `;
@@ -133,9 +142,17 @@ const ReviewForm = () => {
 
         if (starDish) {
             if (diningType === 'Delivery') {
-                review += `After we tried everything, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+                if (isNegativeExperience) {
+                    review += `After we tried everything, the highlight was definitely the ${starDish}—and honestly the only thing I could recommend you guys to try from here. `;
+                } else {
+                    review += `After we tried everything, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+                }
             } else {
-                review += `When the food came out, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+                if (isNegativeExperience) {
+                    review += `When the food came out, the highlight was definitely the ${starDish}—and honestly the only thing I could recommend you guys to try from here. `;
+                } else {
+                    review += `When the food came out, the highlight was definitely the ${starDish}—an absolute standout that you have to try. `;
+                }
             }
         }
 
